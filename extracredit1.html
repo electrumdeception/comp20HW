@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ExtraCredit1</title>
+</head>
+<!--
+When the button is clicked, any text in the textbox on the left should be copied to the text box on the right and removed from the textbox on the left.  Also the button face should change to an arrow facing left.
+
+The next press of the button should move the text on the right to the textbox on the left - and change the button face back to an arrow facing to the right.
+-->
+<body>
+	<h1>Extra Credit October 21, Switched Text</h1>
+	<form>
+		<input type="text" id = "left">
+		<input type="button" id = "switch" value = "->" > 
+		<input type="text" id = "right">
+	</form>
+	<p id = "tester"></p>
+	<script>
+		document.getElementById("switch").addEventListener("click",myMove);
+		function myMove(){
+
+			if (document.getElementById("switch").value =="->"){
+				document.getElementById("switch").value = "<-";
+				document.getElementById("right").value =document.getElementById("left").value;
+				document.getElementById("left").value= "";
+			}
+			else 
+				{
+//					
+					document.getElementById("switch").value = "->";
+					document.getElementById("left").value =document.getElementById("right").value;
+				document.getElementById("right").value= "";
+				}
+			return;
+		}
+		
+	</script>
+</body>
+</html>
