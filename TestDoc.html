@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Amicable Numbers</title>
+</head>
+
+<body>
+	<header>
+		<h1>Are your two numbers amicable? Find out below!</h1>
+	</header>
+	<form id = "numForm">
+		<label for="numberOne">What is your first number: </label><br>
+		<input type="number" id="numberOne" name = "numberOne" value = "numOne" required><br>
+		<label for="numberTwo">What is your second number: </label><br>
+		<input type="number" id="numberTwo" name = "numberTwo" value = "numTwo" required><br>
+		<input type="button" value ="Check Amicability" onClick = "displayNumbers()">
+	</form>
+
+	<div id ="divOne" > 
+		<p id ="pOne"></p>
+		<p id ="pTwo"></p>
+		<p id = "result"></p>
+	</div>
+	
+	
+	
+	<script>
+	
+	//tried to use this but when I used submit instead ofa button it refreshed the page
+	//document.getElementById("numForm").addEventListener("submit", displayNumbers);
+		
+	//function checks to see if posFactor is a factor of myNumber
+	function isFactor(myNumber, posFactor){
+	var dividable = false;
+	if (myNumber%posFactor == 0)
+		{
+			dividable = true;
+		}
+	return dividable;
+	}
+	//tests isFactor
+	////document.write("should say false: ");
+	////document.write(isFactor(5,3)); 
+	////document.write("<br>should say true: ");
+	////document.write(isFactor(15,3)); 
+	////document.write("<br>should say false: ");	
+	////document.write(isFactor(1,3)); 
+		
+	//puts array contents into a div called "divOne"
+	function showArray(myArray){
+		var arrayLength = myArray.length;
+		var y = 0;
+		var newText = document.createTextNode(myArray);
+		var element = document.getElementById("divOne");
+		element.appendChild(newText);
+		}
+	//tests show array
+	//showArray([0,1,2]);
+	//showArray([0,1,12,15]);
+
+	//Sums up all components of input array
+	function addArray(myArray){
+		var y;
+		var mySum=0;
+		for (y = 0; y<myArray.length;y++){
+			mySum += myArray[y];
+		}
+		return mySum;
+	}
+		//tests addArray
+//		document.write(addArray([1,1,1]));
+//		document.write("<br>");
+//		document.write(addArray([1,2,3]));
+//		document.write("<br>");
+	
+	//did not end up using due to an issue with submit
+	//makes sure its a number
+	function validate(){
+		var numOne = document.getElementById("numberOne").value;
+		var numTwo = document.getElementById("numberTwo").value;
+		if (isNaN(numOne))
+		{
+			document.getElementById("errorM").innerHTML("Wrong");// tell user what is wrong
+			document.getElementById("numberOne".focus());
+			return false;
+		}
+		else if (isNaN(numTwo)){
+			alert("Please enter a number");// tell user what is wrong
+			document.getElementById("numberTwo".focus());
+			return false;
+		}
+		else{
+			return true;
+		}
+		}
+		
+	//Takes the numbers fromt the form and displays them and checks if amicable
+	function displayNumbers(){
+		var firstNumber= document.getElementById("numForm").elements[0].value;
+		var secondNumber= document.getElementById("numForm").elements[1].value;
+		document.getElementById("pOne").innerHTML = firstNumber;
+		document.getElementById("pTwo").innerHTML = secondNumber;
+			
+		if (bringItTogether(firstNumber, secondNumber)){
+			document.getElementById("result").innerHTML = "The numbers are amicable";
+		}
+		else{
+			document.getElementById("result").innerHTML = "The numbers are not amicable";
+		}
+		return;
+	}
+
+	//Checks to see if the two numbers are amicable returns true/false
+	function bringItTogether(numOne, numTwo){
+		var oneFacts = getFactors(numOne);
+		var twoFacts = getFactors(numTwo);
+		var sumOne = addArray(oneFacts);
+		 //document.write (sumOne," ",numTwo, "<br>");//test code
+		var sumTwo = addArray(twoFacts);
+		//document.write (sumTwo," ",numOne, "<br>"); //test code
+		var isAmi = false;
+		if ((sumOne == numTwo) && (sumTwo == numOne)){
+			isAmi = true;
+		}
+		return isAmi;
+	}
+	//tests bringItTogether
+	//document.write("should say true: ")
+	//document.write(bringItTogether(220,284));
+	//document.write("<br>should say false: ")
+	//document.write(bringItTogether(221,284));
+		
+	//returns the factors of the input in an array	
+	function getFactors(myNum){
+		var factorArray =[];
+		var i;
+		var limiter =(myNum/2);
+		for (i=0;i<=limiter;i++){
+			if (isFactor(myNum,i)){
+				factorArray.push(i);
+			}
+		}
+			return factorArray;
+	}
+		//tests getFactors()
+//		document.write(getFactors(6));
+//		document.write("<br>");
+//		document.write(getFactors(24));
+//		document.write("<br>");
+		
+							
+	</script>
+</body>
+</html>
+
