@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<!--<script src="jadeJava.js"></script>-->
+<link href="JadeDesign.css" type="text/css" rel="stylesheet">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jade Delight</title>
+</head>
+
+<body>
+<script language="javascript">
+
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 4.5),
+	new MenuItem("Sweet and Sour Pork", 6.25),
+	new MenuItem("Shrimp Lo Mein", 5.25),
+	new MenuItem("Moo Shi Chicken", 6.5),
+	new MenuItem("Fried Rice", 2.35)
+);
+
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+</script>
+
+<h1>Jade Delight</h1>
+<form>
+
+<p>First Name: <input type="text"  name='fname' /></p>
+<p>Last Name*:  <input type="text"  name='lname' /></p>
+<p class = "address">Street: <input type="text"  name='street' /></p>
+<p class = "address">City: <input type="text"  name='city' /></p>
+<p>Phone*: <input type="text"  name='phone' /></p>
+<p> 
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked"/>Pickup  
+	<input type="radio"  name='p_or_d' value = 'delivery'/>
+	Delivery
+</p>
+<table border="0" cellpadding="3">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script language="javascript">
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++)
+  {
+	  s += "<tr><td>";
+	  s += makeSelect("quan" + i, 0, 10);
+	  s += "</td><td>" + menuItems[i].name + "</td>";
+	  s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+	  s += "<td>$<input type='text' name='cost'/></td></tr>";
+  }
+  document.writeln(s);
+</script>
+</table>
+<p>Subtotal: 
+   $<input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p>Mass tax 6.25%:
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p>Total: $ <input type="text"  name='total' id="total" />
+</p>
+
+<input type = "submit" value = "Submit Order" />
+
+</form>
+<script>
+var runningOrder = [""];
+window.onload = function(){
+	document.forms[0].reset(); 
+	for (var i = 1; i <menuItems.length; i++){
+		runningOrder.push("");
+	}
+	console.log(runningOrder.length);
+	var costList = document.getElementsByName("cost");
+	costList = Array.from(costList);
+	var x = document.getElementsByTagName("select");
+	x = Array.from(x);
+	//console.log(x);
+	x.forEach(myFunction)
+	function myFunction(item, index) {
+	item.addEventListener("change", function(){
+		var selection = item.options[item.selectedIndex].value;
+		var price = selection * menuItems[index].cost;
+		runningOrder[index] = selection + " " + menuItems[index].name +"(s)";
+		costList[index].value = price;
+		updatePriceTotal(costList);
+}, false);
+}
+	function addtoOrder(){
+		runningOrder
+	}
+	function updatePriceTotal(costList){
+		document.getElementById("subtotal").value = 0;
+		document.getElementById("tax").value = 0;
+		document.getElementById("total").value = 0;
+		var sum= 0;
+		for(var i = 0; i< costList.length; i++)
+			{
+				//console.log(costList[i].value)
+				sum += Number(costList[i].value);
+			}
+		document.getElementById("subtotal").value = sum.toFixed(2);
+		document.getElementById("tax").value = (sum *0.0625).toFixed(2);
+		document.getElementById("total").value = (sum * 1.0625).toFixed(2);
+	}
+	//function addPrice(myItem, myIndex){
+		
+	//}
+
+//document.forms[0].addEventListener("submit", mySubmit)
+ }
+	function getTime(getMethod){
+	var timeOffset = 0;
+	if (getMethod == "delivery") timeOffset = 30;
+	else timeOffset = 15;
+	var myDate = new Date();
+	myDate.setMinutes(myDate.getMinutes() + timeOffset);
+	myDate = myDate.toLocaleTimeString()
+	return myDate;
+}
+function writeWindow(selectedOption){
+		var t = "";
+		var time = getTime(selectedOption);
+		t = "<h1>Your Order Has been processed</h1><p>Thank you for your order</p>";
+		t += "<p>the "+selectedOption+ " time is " + time+ " </p>";
+		t += "<p>The total amount for your order is $ "+ document.getElementById("total").value + "</p>";
+		t += "<p> Order Summary </p> <ul>" + reportOrder() + "<ul>";
+		return t;
+	}
+
+function reportOrder(){
+	var order = "";
+	for (var i = 0; i<runningOrder.length; i++)
+		{
+			if (runningOrder[i]!= "")
+			order += "<li>" + runningOrder[i] + "</li>"
+		}
+	return order;
+}
+
+$(document).ready(function(){
+
+	$(".address").hide();
+    $('[type="radio"]').click(function(){
+		var selectedOption = $("input:radio[name=p_or_d]:checked").val();
+			if (selectedOption == "pickup"){
+				$(".address").hide();
+			}
+			else if(selectedOption == "delivery")
+				$(".address").show();
+    });
+
+  // Validate Form
+  $("form:eq(0)").validate({
+    // Specify validation rules
+    rules: {
+      lname: "required",
+      phone: {
+        required: true,
+        minlength: 10,
+		maxlength: 10,
+		number: true,},
+		street:{
+		required: function() {
+			return $("input:radio[name=p_or_d]:checked").val() == "delivery";
+				}
+	},
+		city:{
+		required: function() {
+			return $("input:radio[name=p_or_d]:checked").val() == "delivery";
+				}
+	}
+    },
+
+    messages: {
+      lname: "Please enter your lastname",
+      phone:{
+		required: "Please enter a valid phone number",
+		number: "please use numbers"
+	},
+		street: "Please fill in your street address",
+		city: "Please enter your city"
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+    submitHandler: function(form) {
+		var newWindow = window.open("", "newWindow", "width=500,height=500");
+		var selectedOption = $("input:radio[name=p_or_d]:checked").val();
+		var t = writeWindow(selectedOption);
+		newWindow.document.write(t);
+		form.submit();
+    }
+  })
+
+	
+});
+	</script>
+</body>
+</html>
