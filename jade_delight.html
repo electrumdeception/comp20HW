@@ -1,10 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+	
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-<!--<script src="jadeJava.js"></script>-->
 <link href="JadeDesign.css" type="text/css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Jade Delight</title>
@@ -87,29 +88,28 @@ function makeSelect(name, minRange, maxRange)
 <script>
 var runningOrder = [""];
 window.onload = function(){
+	//initialize/reset
 	document.forms[0].reset(); 
 	for (var i = 1; i <menuItems.length; i++){
 		runningOrder.push("");
 	}
-	console.log(runningOrder.length);
 	var costList = document.getElementsByName("cost");
 	costList = Array.from(costList);
 	var x = document.getElementsByTagName("select");
 	x = Array.from(x);
-	//console.log(x);
 	x.forEach(myFunction)
+	
+	//set up event listeners
 	function myFunction(item, index) {
 	item.addEventListener("change", function(){
 		var selection = item.options[item.selectedIndex].value;
 		var price = selection * menuItems[index].cost;
 		runningOrder[index] = selection + " " + menuItems[index].name +"(s)";
-		costList[index].value = price;
+		costList[index].value = price.toFixed(2);
 		updatePriceTotal(costList);
-}, false);
+	}, false);
 }
-	function addtoOrder(){
-		runningOrder
-	}
+	//updates price and tax after each change
 	function updatePriceTotal(costList){
 		document.getElementById("subtotal").value = 0;
 		document.getElementById("tax").value = 0;
@@ -124,12 +124,10 @@ window.onload = function(){
 		document.getElementById("tax").value = (sum *0.0625).toFixed(2);
 		document.getElementById("total").value = (sum * 1.0625).toFixed(2);
 	}
-	//function addPrice(myItem, myIndex){
-		
-	//}
 
-//document.forms[0].addEventListener("submit", mySubmit)
+
  }
+	//finds delivery time
 	function getTime(getMethod){
 	var timeOffset = 0;
 	if (getMethod == "delivery") timeOffset = 30;
@@ -138,17 +136,21 @@ window.onload = function(){
 	myDate.setMinutes(myDate.getMinutes() + timeOffset);
 	myDate = myDate.toLocaleTimeString()
 	return myDate;
-}
-function writeWindow(selectedOption){
+	}
+	
+	//Compiles text info for complete order screen
+	function writeWindow(selectedOption){
 		var t = "";
 		var time = getTime(selectedOption);
-		t = "<h1>Your Order Has been processed</h1><p>Thank you for your order</p>";
+		t = " <link href='JadeDesign.css' type='text/css' rel='stylesheet'> <body id = 'newWindow'>"
+		t += "<h1>Your Order Has been processed</h1><p>Thank you for your order</p>";
 		t += "<p>the "+selectedOption+ " time is " + time+ " </p>";
 		t += "<p>The total amount for your order is $ "+ document.getElementById("total").value + "</p>";
-		t += "<p> Order Summary </p> <ul>" + reportOrder() + "<ul>";
+		t += "<p> Order Summary:</p> <ul>" + reportOrder() + "</ul> </body>";
 		return t;
 	}
 
+//creates list items of cart summary
 function reportOrder(){
 	var order = "";
 	for (var i = 0; i<runningOrder.length; i++)
@@ -160,7 +162,8 @@ function reportOrder(){
 }
 
 $(document).ready(function(){
-
+	
+	//hides address and toggles back and forth
 	$(".address").hide();
     $('[type="radio"]').click(function(){
 		var selectedOption = $("input:radio[name=p_or_d]:checked").val();
@@ -202,8 +205,7 @@ $(document).ready(function(){
 		street: "Please fill in your street address",
 		city: "Please enter your city"
     },
-    // Make sure the form is submitted to the destination defined
-    // in the "action" attribute of the form when valid
+	//on successful submit open new window with order confirm
     submitHandler: function(form) {
 		var newWindow = window.open("", "newWindow", "width=500,height=500");
 		var selectedOption = $("input:radio[name=p_or_d]:checked").val();
