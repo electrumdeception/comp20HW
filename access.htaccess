@@ -1,0 +1,1 @@
+<Files "*.json">Header set Access-Control-Allow-Origin "*"</Files>
