@@ -1,14 +1,35 @@
 @charset "utf-8";
 /* CSS Document */
 
+body{
+		background-color: #F5C6FF;
+		font-family:"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, "sans-serif";
+		text-align: center;
+			
+	}
 table{
 	margin-left: auto;
 	margin-right: auto;
-	text-align: center;
-	border: 5px dashed #C5B6B7;
+/*	text-align: center;*/
+	border: 5px solid #C5B6B7;
+	border-collapse: collapse;
+}
+td{
+	padding:5px;
+	border: 1px solid #000000;
+	
 }
 th{
+	padding:10px;
 	border: 1px solid #000000;
+	border-bottom: 3px solid #000000;
+	background-color: #92A7EC;
+}
+tr:nth-child(even){
+	background-color:#B1DDF5;
+}
+tr:nth-child(odd){
+	background-color:#FFFFFF;
 }
 form {
 	text-align: center;
@@ -19,7 +40,4 @@ input {
 	border-radius: 10px;
 }
 
-	body{
-		background-color: #EEB4B5;
-		font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
-	}
+	
