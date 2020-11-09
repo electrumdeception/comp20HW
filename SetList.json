@@ -1,0 +1,62 @@
+[
+	{
+		"artist" :  "Fleet Foxes",
+		"title" : "Your Protector",
+		"genre" : ["baroque", "pop"],
+		"relaseYear" : 2008
+	},
+	{
+		"artist" : "The National",
+		"title" : "Little Faith",
+		"genre" : ["indie"],
+		"relaseYear" : 2010
+	},
+	{
+		"artist" : "The Head and the Heart",
+		"title" : "Library Magic",
+		"genre" : ["indie"],
+		"relaseYear" : 2016
+	},
+	{
+		"artist" : "Vampire Weekend",
+		"title" : "2021",
+		"genre" : ["indie", "pop"],
+		"relaseYear" : 2019
+	},
+	{
+		"artist" : "Sara Bareilles",
+		"title" : "Armor",
+		"genre" : ["pop"],
+		"relaseYear" : 2019
+	},
+	{
+		"artist" : "Mumford and Sons",
+		"title" : "Babel",
+		"genre" : ["indie"],
+		"relaseYear" : 2012
+	},
+	{
+		"artist" : "Beirut",
+		"title" : "No No No",
+		"genre" : ["indie", "folk"],
+		"relaseYear" : 2015
+	},
+	{
+		"artist" : "Yuno",
+		"title" : "No Going Back",
+		"genre" : ["alternative"],
+		"relaseYear" : 2018
+	},
+	{
+		"artist" : "Hozier",
+		"title" : "Nina Cried Power",
+		"genre" : ["indie", "pop"],
+		"relaseYear" : 2019
+	},
+	{
+		"artist" : "The Killers",
+		"title" : "Runaways",
+		"genre" : ["alternative"],
+		"relaseYear" : 2013
+	}
+]

@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<title>nov9HW</title>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+	<link href="SetStyle.css" type="text/css" rel="stylesheet">
+	<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div id = "plainJson"></div><br/><br/>
+	<div id = "fancyJson"></div> <br/><br/>
+	<script language="javascript">
+	$.get( "https://electrumdeception.github.io/comp20HW/SetList.json", 
+		  function( data ) {
+			str = JSON.stringify(data);
+			document.getElementById("plainJson").innerHTML= str;
+			setList = JSON.parse(str);
+			//alert(setList);
+			//alert (setList[1].artist);
+			displayNice(setList);
+	})
+		
+		function displayNice(myObj){
+			//console.log("here");
+//			alert(myObj);
+//			alert (myObj[1].artist);
+			var songTable ="<table> <tr><th>Song Title</th> <th>Artist</th><th>Genre</th><th>ReleaseYear</th></tr><tbody id='songList'>"
+			var numSongs =myObj.length;
+			//console.log(numSongs);
+			for (var i =0; i<numSongs; i++){
+				var rowname = "row" + i;
+				//console.log(myObj[i].artist);
+				songTable += "<tr id = '" +rowname +"'><td>"+ myObj[i].title+ "</td>";
+				songTable += "<td>"+ myObj[i].artist+ "</td>";
+				songTable += "<td>"+ myObj[i].genre+ "</td>";
+				songTable += "<td>"+ myObj[i].relaseYear+ "</td> </tr>";
+				//console.log(songTable);
+			}
+			songTable += "</tbody> </table>";
+//			alert(songTable);
+			document.getElementById("fancyJson").innerHTML = songTable;
+		}
+	</script>
+	<form id="genreSelect">
+	<select name = "genre" id = "genre" >pop
+		<option value = "pop">Pop</option>
+		<option value = "alternative">Alternative</option>
+		<option value = "baroque">baroque</option>
+		<option value = "indie">indie</option>
+		<option value = "folk">folk</option>
+		<option value = "">all</option>
+		</select>
+		<input id = "myBtn" type = "button" value = "filter">
+	</form>
+	
+	<script>
+		$(document).ready(function(){
+		$("#myBtn").click(function(){
+			var genreChoice = $("#genre").val();
+			//alert(genreChoice);
+			$("#songList tr").filter(function() {
+      			$(this).toggle($(this).text().indexOf(genreChoice) > -1)			
+			});
+		});
+		});
+	</script>
+</body>
+</html>
+
+<!--
+
+When the user clicks the button, display only song titles from the selected genre in a user friendly format.
+
+
+PDF file with listing of the code and  URL of the file working online-->
