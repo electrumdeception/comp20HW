@@ -17,9 +17,11 @@
 	<title>Weather API</title>
 	<meta charset="utf-8"/>
 	<script>
+		//set variables to be used by mult. functions
 		var currentTime = new Date;
 		var sunset;
 		var sunrise;
+		
 		function changeDisp(isSunny)
 		{
 			if(isSunny){
@@ -31,60 +33,55 @@
 			}
 		}
 		function getSunData() {
-			/* Step 1: Make instance of request object...
-			...to make HTTP request after page is loaded*/
+			// Create request 
 			request = new XMLHttpRequest();
 			console.log("1 - request object created");
  	
-			// Step 2: Set the URL for the AJAX request to be the JSON file
-// 			var currentTime = new Date;
+			// Step 2: create the link and get the data
 			var mon = currentTime.getMonth()+1;
 			var myDate = currentTime.getFullYear() +"-"+ mon +"-" + currentTime.getDate();
 			var requestHtml = "https://api.sunrise-sunset.org/json?lat=42.408703&lng=-71.118241&formatted=0&date=" + myDate;
 			request.open("GET", requestHtml, true);
 			
 			console.log("2 - opened request file");
- 
-			// Step 3: set up event handler/callback
+
 
 			request.onreadystatechange = function() {
 				console.log("3 - readystatechange event fired.");
 
 				if (request.readyState == 4 && request.status == 200) {
 
-					// Step 5: wait for done + success
+					// Process info if successful
 					console.log("5 - response received");
 					result = request.responseText;
 					sunData = JSON.parse(result);
-				
-					var myTimeArray = sunData["results"]["sunrise"].split(":");
+		
 					sunrise = new Date(sunData["results"]["sunrise"]);
 					sunset = new Date(sunData["results"]["sunset"]);
 					
 					//var currentTime = new Date(2020, 10, 9, 11, 45,0, 0); //test to check color change funct.
-					
-					document.getElementById("data").innerHTML ="sunrise: " + sunrise.toLocaleTimeString() +
+					//update page
+					document.getElementById("infoDisp").innerHTML ="sunrise: " + sunrise.toLocaleTimeString() +
 						"<br/> sunset: " +sunset.toLocaleTimeString() +
 						"<br/> current time: " +currentTime.toLocaleTimeString();
 				}
 			
 			
-			
+				//if fails
 				else if (request.readyState == 4 && request.status != 200) {
 
-					document.getElementById("data").innerHTML = "Some connection failed. Try Try again";
+					document.getElementById("infoDisp").innerHTML = "Some connection failed. Try Try again";
 
 				}
 
 				else if (request.readyState == 3) {
 
-					document.getElementById("data").innerHTML = "Not quite there yet. Maybe in a bit.";
+					document.getElementById("infoDisp").innerHTML = "Not quite there yet. Maybe in a bit.";
 
 				}
 
 			}
 		
-		// Step 4: fire off the HTTP request
 			request.send();
 			console.log("4 - Request sent");
 		}
@@ -102,7 +99,7 @@
 <body onload="getSunData()">
 	<div id = "top">
 	<h1>Sunrise at Tufts</h1>
-	<div id="data"></div>
+	<div id="infoDisp"></div>
 	<button onClick="changeStyle()">Click to see if its sunny right now</button>
 	<div id= "answer"></div>
 	</div>
