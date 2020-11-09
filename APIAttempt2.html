@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+		body{
+			text-align: center;
+			font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, "sans-serif";
+		}
+		h1{
+			font-size: 36px;
+		}
+		p{
+			text-align: justify;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<title>Weather API</title>
+	<meta charset="utf-8"/>
+	<script>
+		var currentTime = new Date;
+		var sunset;
+		var sunrise;
+		function changeDisp(isSunny)
+		{
+			if(isSunny){
+			$("#top").css("background-color", "yellow");
+			}
+			else{
+			$("#top").css("color", "yellow");	
+			$("#top").css("background-color", "black");
+			}
+		}
+		function getSunData() {
+			/* Step 1: Make instance of request object...
+			...to make HTTP request after page is loaded*/
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+ 	
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+// 			var currentTime = new Date;
+			var mon = currentTime.getMonth()+1;
+			var myDate = currentTime.getFullYear() +"-"+ mon +"-" + currentTime.getDate();
+			var requestHtml = "https://api.sunrise-sunset.org/json?lat=42.408703&lng=-71.118241&formatted=0&date=" + myDate;
+			request.open("GET", requestHtml, true);
+			
+			console.log("2 - opened request file");
+ 
+			// Step 3: set up event handler/callback
+
+			request.onreadystatechange = function() {
+				console.log("3 - readystatechange event fired.");
+
+				if (request.readyState == 4 && request.status == 200) {
+
+					// Step 5: wait for done + success
+					console.log("5 - response received");
+					result = request.responseText;
+					sunData = JSON.parse(result);
+				
+					var myTimeArray = sunData["results"]["sunrise"].split(":");
+					sunrise = new Date(sunData["results"]["sunrise"]);
+					sunset = new Date(sunData["results"]["sunset"]);
+					
+					//var currentTime = new Date(2020, 10, 9, 11, 45,0, 0); //test to check color change funct.
+					
+					document.getElementById("data").innerHTML ="sunrise: " + sunrise.toLocaleTimeString() +
+						"<br/> sunset: " +sunset.toLocaleTimeString() +
+						"<br/> current time: " +currentTime.toLocaleTimeString();
+				}
+			
+			
+			
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("data").innerHTML = "Some connection failed. Try Try again";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Not quite there yet. Maybe in a bit.";
+
+				}
+
+			}
+		
+		// Step 4: fire off the HTTP request
+			request.send();
+			console.log("4 - Request sent");
+		}
+		function changeStyle(){
+					//check to see if its sunny outside
+					var isSunny = (currentTime.getTime() < sunset.getTime()) && (currentTime.getTime() > sunrise.getTime());
+					changeDisp(isSunny);
+					if (isSunny) document.getElementById("answer").innerHTML="The sun is up!"
+					else document.getElementById("answer").innerHTML="It is dark outside!"
+				}
+	</script>
+</head>
+
+
+<body onload="getSunData()">
+	<div id = "top">
+	<h1>Sunrise at Tufts</h1>
+	<div id="data"></div>
+	<button onClick="changeStyle()">Click to see if its sunny right now</button>
+	<div id= "answer"></div>
+	</div>
+	<p>The API I selected returns the sunset/sunrise times given a longitute/latitude and date</p>
+	<p> THe website I got this from is https://sunrise-sunset.org/api</p>
+	 <p>The options I used for the API request are: date, format, and longitude/latitude. Because the API works in UTC time instead of asking for the default date I got the comuters internal date and asked for the sunset and sunrise on that date. Format allowed me to keep the year which was important for comparing against the current time to see if it was still light outside. Longitude/Latitude allowed me to pick the place I was getting data from. If I had had longer I could have found a different API that could have found the computer's local longitude/latitude or ask the user to imput their own.</p> 
+    <p>This API would be useful for people who are programming outdoor lights and want their lighting to turn on when the sun sets. It could also be useful for rowing centers to automatically decide when to start allowing people onto the water in the morning to make sure that no one goes out in the dark</p>
+
+</body>
+</html>
